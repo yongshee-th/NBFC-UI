@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build Nitro Fan Control",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/main.cpp",
+                "-o",
+                "${workspaceFolder}/NBFC_fan",
+                "-I/usr/include/x86_64-linux-gnu/qt5",
+                "-I/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+                "-I/usr/include/x86_64-linux-gnu/qt5/QtGui",
+                "-I/usr/include/x86_64-linux-gnu/qt5/QtCore",
+                "-I/usr/include/x86_64-linux-gnu/qt5/QtUiTools",
+                "-fPIC",
+                "-L/usr/lib/x86_64-linux-gnu",
+                "-lQt5UiTools",  // <--- เอาตัวนี้ขึ้นก่อน เพราะมันเรียกใช้ตัวอื่น
+                "-lQt5Widgets",
+                "-lQt5Gui",
+                "-lQt5Core"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}" // ให้ทำงานในโฟลเดอร์หลัก
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "คอมไพล์โปรแกรมคุมพัดลมด้วย Qt5"
+        }
+    ]
+}

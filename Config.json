@@ -1,0 +1,45 @@
+{
+    "current_theme": "dark",
+    "themes": {
+        "dark": {
+            "window": "background-color: #12141a;",
+            "menubar": "background-color: #12141a; color: white;",
+            "menu": "background-color: #1a1d26; color: white;",
+            "groupbox": "color: #ffffff; border: 1px solid #232730; border-radius: 12px; background-color: #1a1d26; margin-top: 15px;",
+            "labels": "color: #8e94a5;",
+            "values": "color: #3d8bff; font-weight: bold;",
+            "buttons": "background-color: #3d8bff; color: white; border-radius: 8px; font-weight: bold;",
+            "sliders": "QSlider::groove:horizontal { background: #232730; height: 6px; } QSlider::handle:horizontal { background: #3d8bff; width: 14px; border-radius: 7px; }"
+        },
+        "light": {
+            "window": "background-color: #f5f6fa;",
+            "menubar": "background-color: #f5f6fa; color: #2f3640;",
+            "menu": "background-color: #ffffff; color: #2f3640;",
+            "groupbox": "color: #2f3640; border: 1px solid #dcdde1; border-radius: 12px; background-color: white; margin-top: 15px;",
+            "labels": "color: #7f8c8d;",
+            "values": "color: #2980b9; font-weight: bold;",
+            "buttons": "background-color: #2980b9; color: white; border-radius: 8px;",
+            "sliders": "QSlider::groove:horizontal { background: #dcdde1; height: 6px; } QSlider::handle:horizontal { background: #2980b9; width: 14px; border-radius: 7px; }"
+        },
+        "blue": {
+            "window": "background-color: #001f3f;",
+            "menubar": "background-color: #001f3f; color: white;",
+            "menu": "background-color: #003366; color: white;",
+            "groupbox": "color: #7FDBFF; border: 1px solid #0074D9; border-radius: 12px; background-color: #001b36;",
+            "labels": "color: #39CCCC;",
+            "values": "color: #01FF70;",
+            "buttons": "background-color: #0074D9; color: white; border-radius: 8px;",
+            "sliders": "QSlider::groove:horizontal { background: #001b36; height: 6px; } QSlider::handle:horizontal { background: #7FDBFF; width: 14px; border-radius: 7px; }"
+        },
+        "custom": {
+            "window": "background-color: #2c3e50;",
+            "menubar": "background-color: #2c3e50; color: white;",
+            "menu": "background-color: #34495e; color: white;",
+            "groupbox": "color: #ecf0f1; border: 2px solid #e67e22;",
+            "labels": "color: #bdc3c7;",
+            "values": "color: #f1c40f;",
+            "buttons": "background-color: #e67e22; color: white;",
+            "sliders": ""
+        }
+    }
+}

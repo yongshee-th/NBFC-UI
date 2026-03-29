@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Qt App (lern)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/NBFC_fan", // แก้ให้ตรงกับที่ Build ออกมา
+            "preLaunchTask": "Build Nitro Fan Control",
+            "cwd": "${workspaceFolder}", // สำคัญมาก เพื่อให้โปรแกรมหา UI.ui กับ Config.json เจอ
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}
