@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>NBFC UI</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -235,12 +235,18 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionSettings"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuViwer"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
   <action name="actionBackGround">
    <property name="text">
     <string>BackGround</string>

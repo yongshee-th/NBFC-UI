@@ -1,58 +1,107 @@
-# NBFC Fan Control (Linux)
-A fan control program for notebooks, developed with C++ and Qt5. It connects to the NBFC (Notebook Fan Control) system to monitor temperature and fan speed in real-time.
-![Program example image](2026-03-29_21-51.png)
+# ❄️ NBFC UI (Linux)
 
-## Features
-* Real-time Monitoring: Displays CPU/GPU temperature and fan speed (%) read from the actual system.
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc/4.0/)
+[![Qt](https://img.shields.io/badge/Qt-5.15+-41CD52.svg?style=flat&logo=qt)](https://www.qt.io/)
+[![C++](https://img.shields.io/badge/C++-17-00599C.svg?style=flat&logo=c%2B%2B)](https://isocpp.org/)
 
-* Manual Control: Adjust fan speed independently between CPU and GPU via sliders.
+A modern, lightweight fan control interface for Linux notebooks. Built with **C++** and **Qt5**, **NBFC UI** provides a sleek and intuitive way to manage your fan speeds and monitor temperatures using the **NBFC (Notebook Fan Control)** system.
 
-* Auto Mode: Switch back to automatic fan control with a single button.
+![Preview](resources/preview.png)
 
-* Theme System: Supports changing themes (Dark, Light, Blue, Custom) via the Config.json file.
+---
 
-* Linux Optimized: Designed to work on Linux environments (e.g., Kubuntu, Mint).
+## ✨ Features
 
-## Prerequisites
-Before use, ensure your machine has the following installed:
-1. NBFC-Linux: (Very important) The program requires the nbfc command to retrieve values.
-    ```
-    # Check if installed:
-    nbfc status -a
-    ```
-2. Qt5 Development Libraries:
-    ```
-    sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libqt5uitools5-dev
-    ```
-3. Build Tools: g++ and make
+- **🚀 Real-time Monitoring**: Instant feedback on CPU/GPU temperatures and fan speeds.
+- **🎮 Independent Control**: Separate sliders for CPU and GPU fan speeds.
+- **🔄 Auto Mode**: One-click return to system-managed fan control.
+- **⚙️ UI-Based Settings**: Configure everything without touching a text editor.
+- **📁 Profile Management**: List, select, and apply NBFC profiles directly from the UI.
+- **⚡ Service Control**: Start, stop, or restart the NBFC service with a single click.
+- **🎨 Dynamic Themes**: Dark, Light, Blue, and Custom themes with instant application.
+- **📦 Portable Assets**: UI files and icons are embedded into the binary.
 
-## How to Build & Run
-1. Compilation (Manual Build)
+---
 
-    Use the g++ command, ensuring the libraries are in the correct order to prevent errors:
-    ```
-    g++ main.cpp -o NBFC_fan \
-    -I/usr/include/x86_64-linux-gnu/qt5 \
-    -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets \
-    -I/usr/include/x86_64-linux-gnu/qt5/QtUiTools \
-    -lQt5UiTools -lQt5Widgets -lQt5Gui -lQt5Core -fPIC
-    ```
-2. Running the Program
+## 🛠️ Installation Guide
 
-    Make sure the UI.ui and Config.json files are in the same folder as the Executable file:
-    ```
-    ./NBFC_fan
-    ```
-## Configuration & Themes
-You can customize the program's colors in the Config.json file. The program will automatically load the stylesheet without needing to recompile.
-## Project Structure
-* main.cpp: The main logic of the program and signal connections. (Signals/Slots)
-* UI.ui: Program interface designed using Qt Designer
-* Config.json: File storing color and style settings for each theme
-* .vscode/: Build Task settings for VS Code
+Follow these simple steps to install **NBFC UI** on your Linux system.
+
+### 1. Prerequisites
+You must have **NBFC-Linux** installed. If not, follow the instructions for your distribution to install it first. Verify it by running:
+```bash
+nbfc status -a
+```
+
+### 2. Download or Clone
+Download the source code to your machine.
+
+### 3. Run the Installer
+Open a terminal in the project directory and run:
+```bash
+# Make the scripts executable (if needed)
+chmod +x scripts/*.sh
+
+# Run the installation script
+./scripts/install.sh
+```
+The script will automatically:
+- Install required build dependencies (`cmake`, `qt5`, etc.).
+- Compile the source code.
+- Install the binary to `/usr/local/bin`.
+- Add **NBFC UI** to your application menu with a proper icon.
+
+### 4. Launching
+You can now find **NBFC UI** in your application launcher or run it via terminal:
+```bash
+NBFC_UI
+```
+
+---
+
+## 🎮 How to Use
+
+### Managing Sensors & Settings
+1. Go to **Help > Settings** in the menu.
+2. **NBFC Binary Path**: Ensure it points to your `nbfc` command.
+3. **Sensor Paths**: If temperatures show "N/A", you can manually set the paths (e.g., `/sys/class/thermal/thermal_zone0/temp`).
+4. **Interval**: Adjust how fast the UI updates (default is 2000ms).
+
+### Managing NBFC Profiles
+In the **Settings** window:
+1. Use the **Profile** dropdown to see all available configurations for your laptop.
+2. Select your model and click **Apply Profile**.
+3. Use the **Start/Restart** buttons if the service is not running.
+
+---
+
+## 🛠️ Management Scripts
+
+- **Test**: Run locally without installing: `./scripts/test.sh`
+- **Update**: Pull latest code and reinstall: `./scripts/update.sh`
+- **Uninstall**: Remove from system: `./scripts/uninstall.sh`
+
+---
+
+## 📁 Project Structure
+
+```text
+nbfc-ui/
+├── src/               # C++ Source Code (Logic & Settings Dialog)
+├── resources/         # UI Design, Icons, and Qt Resources
+├── scripts/           # Install, Test, Update, Uninstall scripts
+├── Config.json        # Saved User Configuration & Themes
+└── CMakeLists.txt     # Build System Configuration
+```
+
+---
 
 ## 📝 License
 
-This project is licensed under the [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/) license.
-(Attribution-NonCommercial 4.0 International)
-You are free to use or modify it, **but you may not use it commercially or sell it**, and please give credit to the original developer.
+This project is licensed under the **CC BY-NC 4.0** license.
+- **Free for personal use.**
+- **Commercial use is prohibited.**
+- **Attribution is required.**
+
+---
+*Developed with ❤️ for the Linux Community.*

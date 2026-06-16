@@ -1,4 +1,12 @@
 {
+    "settings": {
+        "version": "2.3",
+        "nbfc_path": "nbfc",
+        "update_interval_ms": 2000,
+        "cpu_sensor_path": "/sys/class/thermal/thermal_zone0/temp",
+        "gpu_sensor_path": "/sys/class/thermal/thermal_zone1/temp",
+        "auto_detect_sensors": true
+    },
     "current_theme": "dark",
     "themes": {
         "dark": {

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=NBFC UI
+Comment=Fan Control UI for NBFC Linux
+Exec=NBFC_UI
+Icon=NBFC-fan-control-ui
+Terminal=false
+Categories=System;Settings;
+Keywords=fan;control;nbfc;temperature;
