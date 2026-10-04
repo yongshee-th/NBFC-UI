@@ -43,6 +43,22 @@
 
 const QString APP_VERSION = "2.4";
 
+// หาไฟล์อุณหภูมิ CPU Package จาก hwmon "coretemp" ตามชื่อ (เลข hwmonN เปลี่ยนได้ทุกครั้งที่บูต)
+QString findCpuPackageSensor() {
+    const auto dirs = QDir("/sys/class/hwmon").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString &d : dirs) {
+        QString base = "/sys/class/hwmon/" + d;
+        QFile n(base + "/name");
+        if (!n.open(QIODevice::ReadOnly) || QString(n.readAll()).trimmed() != "coretemp") continue;
+        for (int i = 1; i <= 4; ++i) {
+            QFile l(QString("%1/temp%2_label").arg(base).arg(i));
+            if (l.open(QIODevice::ReadOnly) && QString(l.readAll()).startsWith("Package"))
+                return QString("%1/temp%2_input").arg(base).arg(i);
+        }
+    }
+    return {};
+}
+
 struct Config {
     QString nbfcPath = "nbfc";
     int updateIntervalMs = 2000;
@@ -73,6 +89,13 @@ struct Config {
         currentTheme = root.value("current_theme").toString(currentTheme);
         themes = root.value("themes").toObject();
         file.close();
+
+        // ค่าเดิม (acpitz thermal_zone0) ไม่ใช่อุณหภูมิ CPU จริง และเฉลี่ยคอร์ทำให้ต่ำกว่าจริง -> ใช้ Package แทน
+        if (cpuSensorPath.isEmpty() || cpuSensorPath == "auto"
+            || cpuSensorPath == "/sys/class/thermal/thermal_zone0/temp") {
+            QString pkg = findCpuPackageSensor();
+            if (!pkg.isEmpty()) cpuSensorPath = pkg;
+        }
     }
 
     void save() {
@@ -1081,7 +1104,10 @@ int main(int argc, char *argv[]) {
             QRegularExpression reProfile("Selected Config Name\\s+:\\s+(.*)");
             auto m = reProfile.match(out);
             QString activeProfile = m.hasMatch() ? m.captured(1).trimmed() : QString();
-            header.profileLabel->setText(m.hasMatch() ? "Profile: " + activeProfile : "");
+            QRegularExpression reNbfcTemp("Temperature\\s+:\\s+(\\d+\\.\\d+)");
+            auto tm = reNbfcTemp.match(out);
+            QString nbfcTemp = tm.hasMatch() ? QString("  ·  NBFC temp %1°C").arg(qRound(tm.captured(1).toDouble())) : QString();
+            header.profileLabel->setText(m.hasMatch() ? "Profile: " + activeProfile + nbfcTemp : "");
 
             // --- ตรวจสอบและเตือน ---
             QStringList warns;
