@@ -932,18 +932,6 @@ QString findMatchingProfile(const QString &dmi) {
     return best;
 }
 
-// มีไดรเวอร์เคอร์เนล (acer_wmi) เปิดช่อง pwm ของพัดลมไว้ด้วยหรือไม่ — ซ้อนกับ NBFC ที่เขียน EC โดยตรง
-bool kernelFanDriverPresent() {
-    const auto dirs = QDir("/sys/class/hwmon").entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    for (const QString &d : dirs) {
-        QFile n("/sys/class/hwmon/" + d + "/name");
-        if (n.open(QIODevice::ReadOnly) && QString(n.readAll()).trimmed() == "acer"
-            && QFile::exists("/sys/class/hwmon/" + d + "/pwm1"))
-            return true;
-    }
-    return false;
-}
-
 // เปลี่ยนโปรไฟล์ (ต้องใช้สิทธิ์ root) แล้วรีสตาร์ทเซอร์วิส
 bool switchProfile(const QString &profile) {
     QString cmd = QString("%1 config -s '%2' && %1 restart").arg(g_config.nbfcPath, profile);
@@ -1068,6 +1056,7 @@ int main(int argc, char *argv[]) {
 
             // "Current Fan Speed" คือรอบพัดลม (RPM) ไม่ใช่เปอร์เซ็นต์ ส่วน "Target Fan Speed" คือ %
             QRegularExpression reRpm("Current Fan Speed\\s+:\\s+(\\d+\\.\\d+)");
+            QRegularExpression reSteps("Fan Speed Steps\\s+:\\s+(\\d+)");
             QRegularExpression reTarget("Target Fan Speed\\s+:\\s+(\\d+\\.\\d+)");
             QRegularExpression reAuto("Auto Control Enabled\\s+:\\s+(true|false)");
             QRegularExpression reCritical("Critical Mode Enabled\\s+:\\s+(true|false)");
@@ -1076,6 +1065,12 @@ int main(int argc, char *argv[]) {
             QList<double> rpms, targets;
             QList<bool> autos, criticals;
             for (auto it = reRpm.globalMatch(out); it.hasNext();) rpms << it.next().captured(1).toDouble();
+            QList<int> steps;
+            for (auto it = reSteps.globalMatch(out); it.hasNext();) steps << it.next().captured(1).toInt();
+            // โปรไฟล์ที่ MaxSpeedValueRead > 100 (เช่น AN515-58 = 7317) รายงาน Current เป็น % ของรอบสูงสุด
+            // ต้องแปลงเป็น RPM จริง; โปรไฟล์ที่ steps = 100 รายงานเป็นค่า RPM ดิบอยู่แล้ว
+            for (int i = 0; i < rpms.size() && i < steps.size(); ++i)
+                if (steps[i] > 100) rpms[i] = rpms[i] * steps[i] / 100.0;
             for (auto it = reTarget.globalMatch(out); it.hasNext();) targets << it.next().captured(1).toDouble();
             for (auto it = reAuto.globalMatch(out); it.hasNext();) autos << (it.next().captured(1) == "true");
             for (auto it = reCritical.globalMatch(out); it.hasNext();) criticals << (it.next().captured(1) == "true");
@@ -1129,9 +1124,6 @@ int main(int argc, char *argv[]) {
                     warns << QString("พัดลม %1 อ่านได้ 0 RPM ทั้งที่สั่ง %2% — พัดลมอาจเสีย/ไม่หมุน หรือโปรไฟล์ไม่รองรับ")
                                  .arg(fanNames[i]).arg(qRound(targets[i]));
             }
-
-            if (kernelFanDriverPresent())
-                warns << "พบไดรเวอร์เคอร์เนล acer (pwm1/pwm2) ควบคุมพัดลมคู่กับ NBFC — หากพัดลมเพี้ยน ให้ลองถอดโมดูล acer_wmi";
 
             // Watchdog: โหมด manual แต่ร้อนเกิน 90°C และพัดลมยังไม่เต็ม -> คืนให้ auto ทันที
             static QElapsedTimer lastGuard;
